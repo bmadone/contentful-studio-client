@@ -1,9 +1,10 @@
 // @ts-ignore
 import { defineComponents } from "@contentful/experiences-sdk-react";
+import type { ComponentRegistration } from "@contentful/experiences-core/types";
 import { Button } from "./components/button/button";
 import { Heading } from "./components/heading/heading";
 
-defineComponents([
+const components: ComponentRegistration[] = [
   {
     component: Button,
     definition: {
@@ -18,22 +19,22 @@ defineComponents([
         },
         variant: {
           displayName: "Variant",
-          // @ts-ignore
-          type: "Enum",
+          type: "Text",
           defaultValue: "primary",
           validations: {
-            // @ts-ignore
-            in: ["primary", "secondary", "outline"],
+            in: [
+              { value: "primary" },
+              { value: "secondary" },
+              { value: "outline" },
+            ],
           },
         },
         size: {
           displayName: "Size",
-          // @ts-ignore
-          type: "Enum",
+          type: "Text",
           defaultValue: "medium",
           validations: {
-            // @ts-ignore
-            in: ["small", "medium", "large"],
+            in: [{ value: "small" }, { value: "medium" }, { value: "large" }],
           },
         },
       },
@@ -51,18 +52,24 @@ defineComponents([
           type: "Text",
           defaultValue: "Heading",
         },
-        // @ts-ignore
         level: {
           displayName: "Level",
-          // @ts-ignore
-          type: "Enum",
+          type: "Text",
           defaultValue: "h2",
           validations: {
-            // @ts-ignore
-            in: ["h1", "h2", "h3", "h4", "h5", "h6"],
+            in: [
+              { value: "h1" },
+              { value: "h2" },
+              { value: "h3" },
+              { value: "h4" },
+              { value: "h5" },
+              { value: "h6" },
+            ],
           },
         },
       },
     },
   },
-]);
+];
+
+defineComponents(components);

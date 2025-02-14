@@ -10,8 +10,8 @@ export async function getServerSideProps({
   params,
 }: GetServerSidePropsContext) {
   const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+    space: contentfulConfig.space,
+    accessToken: contentfulConfig.accessToken,
   });
 
   try {

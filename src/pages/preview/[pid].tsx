@@ -81,6 +81,9 @@ export const getServerSideProps = async ({
   const stylesheet = experience ? detachExperienceStyles(experience) : null;
   const experienceJSON = experience ? JSON.stringify(experience) : null;
 
+  console.log("stylesheet", stylesheet);
+  console.log("experienceJSON", experienceJSON);
+
   return {
     props: {
       experienceJSON,

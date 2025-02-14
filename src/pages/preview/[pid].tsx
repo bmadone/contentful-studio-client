@@ -14,10 +14,7 @@ export async function getServerSideProps({
   });
 
   try {
-    if (!params?.pid) {
-      return { notFound: true };
-    }
-    const entry = await client.getEntry(params.pid as string);
+    const entry = await client.getEntry(params!.pid as string);
 
     return {
       props: {

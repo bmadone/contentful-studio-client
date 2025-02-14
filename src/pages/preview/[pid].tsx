@@ -3,56 +3,48 @@ import { useRouter } from "next/router";
 import { createClient } from "contentful";
 import { fetchBySlug } from "@contentful/experiences-sdk-react";
 import { contentfulConfig } from "@/lib/contentful-config";
+import { NextPage, GetServerSidePropsContext } from "next";
 
-const Preview = () => {
-  const router = useRouter();
-  const { pid } = router.query;
-  const [experienceData, setExperienceData] = React.useState<any>(null);
-  const [error, setError] = React.useState<string>("");
+// Add getServerSideProps for SSR data fetching
+export async function getServerSideProps({
+  params,
+}: GetServerSidePropsContext) {
+  const client = createClient({
+    space: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  });
 
-  React.useEffect(() => {
-    async function fetchData() {
-      if (!pid) return;
-
-      const experienceClient = createClient({
-        space: contentfulConfig.space,
-        environment: contentfulConfig.environment,
-        accessToken: contentfulConfig.accessToken,
-      });
-
-      try {
-        const experience = await fetchBySlug({
-          client: experienceClient,
-          slug: pid as string,
-          experienceTypeId: contentfulConfig.experienceTypeId,
-          localeCode: contentfulConfig.localeCode,
-          isEditorMode: false,
-        });
-
-        setExperienceData(experience);
-        console.log("Full experience data:", experience); // For debugging
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch data");
-        console.error("Fetch error:", err);
-      }
+  try {
+    if (!params?.pid) {
+      return { notFound: true };
     }
+    const entry = await client.getEntry(params.pid as string);
 
-    fetchData();
-  }, [pid]);
+    return {
+      props: {
+        entry,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+}
+
+// Update the component to receive props
+interface PreviewProps {
+  entry: any; // You can type this more specifically based on your content model
+}
+
+const Preview: NextPage<PreviewProps> = ({ entry }) => {
+  // Remove any client-side fetching logic since data is now from props
 
   return (
-    <main style={{ width: "100%" }}>
-      <div style={{ padding: "1rem" }}>
-        <p>URL Parameter: {pid}</p>
-        {error && <p style={{ color: "red" }}>Error: {error}</p>}
-        <p>
-          Experience Data:{" "}
-          {experienceData
-            ? JSON.stringify(experienceData, null, 2)
-            : "Loading..."}
-        </p>
-      </div>
-    </main>
+    <div>
+      {/* Render your preview content using the entry prop */}
+      <pre>{JSON.stringify(entry, null, 2)}</pre>
+    </div>
   );
 };
 

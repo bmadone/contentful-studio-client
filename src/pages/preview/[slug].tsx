@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 
 const Preview = () => {
   const router = useRouter();
-  const { pid } = router.query;
+  const { slug } = router.query;
 
   return (
     <main style={{ width: "100%" }}>
       <div style={{ padding: "1rem" }}>
-        <p>Current slug: {pid}</p>
+        <p>Current slug: {slug}</p>
       </div>
     </main>
   );

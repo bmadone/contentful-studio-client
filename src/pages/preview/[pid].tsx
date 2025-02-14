@@ -1,58 +1,27 @@
 import React from "react";
 import { createClient } from "contentful";
 import { contentfulConfig } from "@/lib/contentful-config";
-import { NextPage, GetServerSidePropsContext } from "next";
+import { NextPage } from "next";
 import {
   ExperienceRoot,
   detachExperienceStyles,
   useFetchBySlug,
 } from "@contentful/experiences-sdk-react";
-
-// Import component and token registrations
 import "@/registered-components";
 import "@/registered-tokens";
 
-// Add getServerSideProps for SSR data fetching
-export async function getServerSideProps({
-  params,
-}: GetServerSidePropsContext) {
-  if (!params?.pid) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const client = createClient({
-    space: contentfulConfig.space,
-    accessToken: contentfulConfig.accessToken,
-    environment: contentfulConfig.environment,
-  });
-
-  try {
-    // Assuming pid is the experience slug directly
-    return {
-      props: {
-        slug: params.pid,
-      },
-    };
-  } catch (error) {
-    return {
-      notFound: true,
-    };
-  }
-}
-
-// Update the component to receive props
 interface PreviewProps {
   slug: string;
 }
 
+const client = createClient({
+  space: contentfulConfig.space,
+  accessToken: contentfulConfig.accessToken,
+  environment: contentfulConfig.environment,
+});
+
 const Preview: NextPage<PreviewProps> = ({ slug }) => {
-  const client = createClient({
-    space: contentfulConfig.space,
-    accessToken: contentfulConfig.accessToken,
-    environment: contentfulConfig.environment,
-  });
+  console.log("slug", slug);
 
   const { isLoading, experience } = useFetchBySlug({
     client,
@@ -60,6 +29,8 @@ const Preview: NextPage<PreviewProps> = ({ slug }) => {
     localeCode: contentfulConfig.localeCode,
     slug,
   });
+
+  console.log("experience", experience);
 
   if (!experience || isLoading) {
     return (
@@ -70,6 +41,7 @@ const Preview: NextPage<PreviewProps> = ({ slug }) => {
   }
 
   const experienceStyles = detachExperienceStyles(experience);
+  console.log("experienceStyles", experienceStyles);
 
   return (
     <div>

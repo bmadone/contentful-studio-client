@@ -1,7 +1,5 @@
 import React from "react";
-import { useRouter } from "next/router";
 import { createClient } from "contentful";
-import { fetchBySlug } from "@contentful/experiences-sdk-react";
 import { contentfulConfig } from "@/lib/contentful-config";
 import { NextPage, GetServerSidePropsContext } from "next";
 

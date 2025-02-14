@@ -31,4 +31,4 @@ export const designTokens = {
   textColor: { Dark: "#1a1a1a", Light: "#efefef", Slate: "#94a3b8" },
 };
 
-defineDesignTokens(designTokens);
+defineDesignTokens(designTokens as any);
